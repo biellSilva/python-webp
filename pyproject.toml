@@ -1,0 +1,15 @@
+[project]
+name = "python-webp"
+version = "0.1.0"
+description = "A Python library for convert images to WebP format."
+authors = [
+    { name = "Gabriel Nobrega", email = "gabrieltkdnobrega63@gmail.com" },
+]
+dependencies = []
+requires-python = "==3.12.*"
+readme = "README.md"
+license = { text = "MIT" }
+
+
+[tool.pdm]
+distribution = false
