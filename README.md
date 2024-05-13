@@ -1,1 +1,1 @@
-# python-webp
+# pywebp

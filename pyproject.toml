@@ -1,15 +1,28 @@
 [project]
-name = "python-webp"
+name = "pywebp"
 version = "0.1.0"
-description = "A Python library for convert images to WebP format."
+description = "python image converter to webp format"
 authors = [
     { name = "Gabriel Nobrega", email = "gabrieltkdnobrega63@gmail.com" },
 ]
-dependencies = []
-requires-python = "==3.12.*"
+dependencies = ["pillow>=10.3.0"]
+requires-python = ">=3.11"
 readme = "README.md"
 license = { text = "MIT" }
 
 
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
 [tool.pdm]
-distribution = false
+distribution = true
+
+
+[tool.pdm.dev-dependencies]
+dev = ["types-pillow>=10.2.0.20240511"]
+
+
+[project.scripts]
+pywebp = "pywebp.core:main"
