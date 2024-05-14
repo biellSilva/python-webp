@@ -1,5 +1,5 @@
 [project]
-name = "pywebp"
+name = "python-webp"
 description = "Python image converter to webp format"
 authors = [
     { name = "Gabriel Nobrega", email = "gabrieltkdnobrega63@gmail.com" },
@@ -12,7 +12,7 @@ license = { file = "LICENSE" }
 dynamic = ["version"]
 
 [project.urls]
-Repository = "https://github.com/biellSilva/pywebp"
+Repository = "https://github.com/biellSilva/python-webp"
 
 
 [build-system]
