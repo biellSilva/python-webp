@@ -1,7 +1,6 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Any, Generator
 
 from PIL import Image
 from PIL.Image import Image as ImageType
@@ -13,10 +12,12 @@ AVALIABLE_FORMATS: set[str] = set([".jpg", ".jpeg", ".png"])
 
 def _setup_logging():
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
     )
+
     logger = logging.getLogger("pywebp")
+
     return logger
 
 
@@ -82,6 +83,17 @@ class Core:
             return "x".join(map(str, size))
         return None
 
+    def __get_output_path(self, path: Path) -> Path:
+        path_ = Path(self.output)
+
+        if self.keep_directory:
+            parents = [parent.name for parent in path.parents]
+            parents.reverse()
+            path_ = Path(self.output, *parents)
+
+        path_.mkdir(parents=True, exist_ok=True)
+        return path_
+
     def resize_image(self, image: ImageType) -> ImageType:
         if self.size:
             self.__log(f"Resizing image to {self.__size_to_string(self.size)}")
@@ -92,23 +104,15 @@ class Core:
         self.__log(f"Opening image {str(path)}")
         return Image.open(path)
 
-    def _get_output_path(self, path: Path) -> Path:
-        path_ = Path(self.output) / path.name / path.with_suffix(".webp")
-        if self.keep_directory:
-            path_ = Path(self.output) / path.relative_to(self.input).with_suffix(
-                ".webp"
-            )
-
-        path_.mkdir(parents=True, exist_ok=True)
-        return path_
-
     def convert_to_webp(self, image: ImageType, path: Path) -> None:
-        output_path = self._get_output_path(path)
+        output_path = Path(
+            str(self.__get_output_path(path)), path.name.split(".")[0] + ".webp"
+        )
 
         self.__log(f"Saving image to {str(output_path)}")
 
         image.save(
-            output_path,
+            str(output_path),
             "WEBP",
             quality=self.quality,
             optimize=self.optimize,
@@ -122,41 +126,29 @@ class Core:
             self.__log(f"Unlinking {str(path)}")
             path.unlink(missing_ok=True)
 
-    def load_recursive(self, path: Path | str) -> Generator[Path, Any, None]:
-        path = path if isinstance(path, Path) else Path(path)
+    def process_images(self, path: Path | None = None):
+        path = path or Path(self.input)
 
         assert path.exists(), f"Path {path} does not exist"
 
-        if path.is_dir():
-            self.__log(f"Loading images from {path}")
-            for folder_or_file in path.iterdir():
-                if folder_or_file.is_dir() and self.recursive:
-                    self.load_recursive(folder_or_file)
+        if path.is_file():
+            self.convert_image(path)
+            return
 
-                if (
-                    path.is_file()
-                    and path.suffix != ".webp"
-                    and path.suffix in AVALIABLE_FORMATS
-                ):
-                    self.__log(f"Found image {path}")
-                    yield path
+        for file in Path(path).iterdir():
+            if file.is_dir() and self.recursive:
+                self.process_images(file)
 
-        if (
-            path.is_file()
-            and path.suffix != ".webp"
-            and path.suffix in AVALIABLE_FORMATS
-        ):
-            self.__log(f"Found image {path}")
-            yield path
-
-    def process_images(self) -> None:
-        if not self.no_threads:
-            with ThreadPoolExecutor(max_workers=self.threads) as executor:
-                for path in self.load_recursive(self.input):
-                    executor.submit(self.convert_image, path)
-        else:
-            for path in self.load_recursive(self.input):
-                self.convert_image(path)
+            if (
+                file.is_file()
+                and file.suffix != ".webp"
+                and file.suffix in AVALIABLE_FORMATS
+            ):
+                if not self.no_threads:
+                    with ThreadPoolExecutor(max_workers=self.threads) as executor:
+                        executor.submit(self.convert_image, file)
+                else:
+                    self.convert_image(file)
 
 
 def main():
