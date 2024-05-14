@@ -11,6 +11,9 @@ readme = "README.md"
 license = { file = "LICENSE" }
 dynamic = ["version"]
 
+[project.urls]
+Repository = "https://github.com/biellSilva/pywebp"
+
 
 [build-system]
 requires = ["pdm-backend"]
