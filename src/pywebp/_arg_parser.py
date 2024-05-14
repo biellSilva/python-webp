@@ -6,7 +6,8 @@ def get_argparser():
 
     parser.add_argument("input", help="Input image file or directory")
     parser.add_argument(
-        "-o" "--output",
+        "-o",
+        "--output",
         help="Output image file or directory",
         default="./output",
         dest="output",
