@@ -1,14 +1,15 @@
 [project]
 name = "pywebp"
-version = "0.1.0"
-description = "python image converter to webp format"
+description = "Python image converter to webp format"
 authors = [
     { name = "Gabriel Nobrega", email = "gabrieltkdnobrega63@gmail.com" },
 ]
 dependencies = ["pillow>=10.3.0"]
 requires-python = ">=3.11"
 readme = "README.md"
-license = { text = "MIT" }
+
+license = { file = "LICENSE" }
+dynamic = ["version"]
 
 
 [build-system]
@@ -18,6 +19,11 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 distribution = true
+
+
+[tool.pdm.version]
+source = "file"
+path = "src/pywebp/__version__.py"
 
 
 [tool.pdm.dev-dependencies]
