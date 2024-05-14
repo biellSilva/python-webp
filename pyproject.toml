@@ -1,5 +1,5 @@
 [project]
-name = "python-webp"
+name = "pywebp2"
 description = "Python image converter to webp format"
 authors = [
     { name = "Gabriel Nobrega", email = "gabrieltkdnobrega63@gmail.com" },
@@ -26,7 +26,7 @@ distribution = true
 
 [tool.pdm.version]
 source = "file"
-path = "src/pywebp/__version__.py"
+path = "src/pywebp2/__version__.py"
 
 
 [tool.pdm.dev-dependencies]
@@ -34,4 +34,12 @@ dev = ["types-pillow>=10.2.0.20240511"]
 
 
 [project.scripts]
-pywebp = "pywebp.core:main"
+pywebp = "pywebp2.core:main"
+
+
+[tool.pdm.build]
+excludes = ["./**/.git"]
+package-dir = "src"
+includes = ["src/pywebp2"]
+source-includes = ["LICENSE", "README.md"]
+editable-backend = "path"
