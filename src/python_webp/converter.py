@@ -123,7 +123,7 @@ class Converter:
             self._files.extend([Path(file) for file in files])
             progress.update(self.task, total=len(self._files), refresh=True)
 
-        _logger.debug(f"Found {len(self._files)} image files")
+        _logger.info(f"Found {len(self._files)} image files")
 
     def _iter_files(self, progress: Progress) -> None:
         _logger.debug("Starting conversion")
@@ -202,7 +202,7 @@ class Converter:
             path.unlink()
             _logger.debug(f"Unlinked {path}")
 
-        _logger.debug(f"=> {output_path}")
+        _logger.info(f"=> {output_path}")
         progress.advance(self.task)
 
     def run(self) -> None:
