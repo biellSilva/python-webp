@@ -12,6 +12,8 @@ dynamic = ["version"]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
+[project.urls]
+Repository = "https://github.com/biellSilva/python-webp"
 
 [tool.pdm]
 distribution = true
