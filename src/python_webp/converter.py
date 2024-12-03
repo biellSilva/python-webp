@@ -134,6 +134,8 @@ class Converter:
             with ThreadPoolExecutor(max_workers=self.threads) as executor:
                 for file in self._files:
                     executor.submit(self._convert_image, file, progress)
+
+                executor.shutdown(wait=True)
         else:
             for file in self._files:
                 self._convert_image(path=file, progress=progress)
