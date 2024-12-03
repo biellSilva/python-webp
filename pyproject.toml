@@ -1,0 +1,27 @@
+[project]
+name = "python-webp"
+description = "Python Image to WEBP"
+authors = [{ name = "Gabriel", email = "gabrieltkdnobrega63@gmail.com" }]
+dependencies = ["pillow>=11.0.0", "typer>=0.14.0"]
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+dynamic = ["version"]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.version]
+source = "call"
+getter = "src.python_webp.__version__:get_version"
+
+[dependency-groups]
+dev = ["types-pillow>=10.2.0.20240822"]
+
+[project.scripts]
+pywebp = "python_webp.cli:main"
